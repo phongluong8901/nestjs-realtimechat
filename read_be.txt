@@ -1,0 +1,107 @@
+1# --- docs
+
+-- GraphQL
+So sánh REST API vs GraphQL
+Endpoint: REST dùng nhiều đường dẫn (/users, /posts); GraphQL dùng duy nhất một đường dẫn (/graphql).
+Dữ liệu: REST trả về cả "đống" cố định (dễ thừa dữ liệu); GraphQL chỉ trả đúng những gì Frontend yêu cầu (tiết kiệm băng thông).
+Số lần gọi: REST phải gọi nhiều lần để lấy đủ dữ liệu liên quan; GraphQL chỉ cần 1 lần gọi duy nhất cho tất cả các quan hệ (Query lồng nhau).
+Định nghĩa: REST thường không chặt chẽ về kiểu dữ liệu; GraphQL bắt buộc có Schema, tự động sinh tài liệu (Docs) cực chuẩn.
+
+Với REST, Backend là người quyết định "Mày được xem cái gì".
+Với GraphQL, Frontend là người quyết định "Tao muốn xem cái gì", còn Backend chỉ đóng vai trò "Người phục vụ" cung cấp đúng món đó.
+
+-- Publish/Subscribe (Pub/Sub)
+mô hình Publish/Subscribe (Pub/Sub) là một mô hình truyền thông điệp (messaging pattern) cực kỳ quan trọng để xây dựng các hệ thống có tính mở rộng cao và phản hồi thời gian thực.
+Khác với mô hình Client-Server truyền thống (nơi Client yêu cầu và Server trả lời trực tiếp), mô hình Pub/Sub giới thiệu một thành phần trung gian gọi là Message Broker (hoặc Event Bus).
+Publisher (Người xuất bản): Không gửi dữ liệu trực tiếp đến từng người nhận. Thay vào đó, nó đóng gói dữ liệu thành một "thông điệp" (message) và gửi kèm một cái nhãn (thường gọi là Topic hoặc Channel) vào Broker.
+Message Broker (Người điều phối): Lưu trữ danh sách các Topic và các Subscriber tương ứng. Khi có tin nhắn mới, nó sẽ tự động sao chép và đẩy tin nhắn đó đến tất cả những ai đã đăng ký.
+Subscriber (Người đăng ký): Đăng ký quan tâm đến một hoặc nhiều Topic cụ thể. Họ chỉ việc ngồi đợi Broker đẩy dữ liệu về mà không cần biết ai là người đã gửi tin nhắn đó
+GraphQL Subscriptions: Sử dụng trong các ứng dụng Chat hoặc Dashboard. Khi có tin nhắn mới trong Database, server sẽ "publish" một sự kiện và tất cả client đang kết nối qua WebSockets (Subscribers) sẽ nhận được tin nhắn đó ngay lập tức trên UI.
+Redis Pub/Sub: Một công cụ cực nhẹ và nhanh để truyền tin nhắn giữa các dịch vụ backend chạy bằng NestJS hoặc Go.
+Apache Kafka / RabbitMQ: Các hệ thống Broker mạnh mẽ hơn, dùng để xử lý hàng triệu sự kiện mỗi giây, đảm bảo tin nhắn không bị mất ngay cả khi hệ thống gặp sự cố.
+
+
+2# --- install
+pnpm i @nestjs/config @nestjs/mongoose mongoose
+pnpm add @nestjs/mongoose mongoose @nestjs/config
+pnpm i joi
+
+pnpm i @nestjs/graphql @nestjs/apollo @apollo/server graphql
+pnpm add @nestjs/graphql @nestjs/apollo apollo-server-express graphql
+pnpm add @apollo/server @as-integrations/express graphql @nestjs/apollo @nestjs/graphql
+pnpm add @as-integrations/express
+
+pnpm i bcrypt --save
+pnpm i -D @types/bcrypt --save
+
+pnpm install class-validator class-transformer
+pnpm --save i class-validator class-transformer
+
+pnpm i --save nestjs-pino pino-http pino-pretty
+
+pnpm i --save migrate-mongo
+pnpm i -D @types/migrate-mongo --save
+
+pnpm i --save mongodb
+
+npm install -D ts-node
+
+pnpm i --save @nestjs/passport passport passport-local
+pnpm add @nestjs/passport passport passport-local
+pnpm add -D @types/passport-local
+
+pnpm i --save @nestjs/jwt passport-jwt
+pnpm i --save -D @types/passport-jwt
+
+pnpm i --save -D @types/cookie-parser
+pnpm add cookie-parser @types/cookie-parser
+
+pnpm i --save graphql-subscriptions graphql-ws
+
+yarn add jsonwebtoken
+yarn add -D @types/jsonwebtoken
+
+3# --- generate
+
+nest g resource users
+--
+✔ What transport layer do you use? GraphQL (code first)
+✔ Would you like to generate CRUD entry points? Yes
+CREATE users/users.module.ts (233 bytes)
+CREATE users/users.resolver.ts (1144 bytes)
+CREATE users/users.resolver.spec.ts (544 bytes)
+CREATE users/users.service.ts (651 bytes)
+CREATE users/users.service.spec.ts (471 bytes)
+CREATE users/dto/create-user.input.ts (203 bytes)
+CREATE users/dto/update-user.input.ts (251 bytes)
+CREATE users/entities/user.entity.ts (194 bytes)
+PS D:\A_Self_Proj\learn_nestjs\proj3_laernNestjs> 
+
+
+--
+nest g module auth
+nest g service auth
+nest g controller auth
+
+nest g resource chats
+nest g resource chats/messages
+-> no
+
+4# --- run 
+npm i -g @nestjs/cli@latest
+nest new chatter-backend
+
+-> pnpm
+cd chatter-backend 
+
+pnpm run start:dev
+
+
+
+
+
+
+5# --- docker
+
+
+6# --- more

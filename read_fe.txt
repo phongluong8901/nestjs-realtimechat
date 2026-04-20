@@ -1,0 +1,71 @@
+1# --- docs
+
+-- Apollo
+Apollo là một bộ công cụ giúp bạn kết nối ứng dụng Client (React, Vue, iOS...) với một Server GraphQL. Nó chia làm 2 phần chính:
+Apollo Server: (Nằm ở phía NestJS của bạn) Có nhiệm vụ giải mã các câu lệnh GraphQL và lấy dữ liệu từ Database trả về.
+Apollo Client: (Nằm ở phía React của bạn) Có nhiệm vụ gửi yêu cầu đi, nhận dữ liệu về và tự động lưu vào bộ nhớ đệm (Cache) để lần sau không cần tải lại nữa.
+1. @nestjs/apollo (Phổ biến nhất)
+2. @nestjs/mercurius (Nhanh nhất)
+3. Các lựa chọn khác (Community-driven)
+
+-- makeVar
+Trong Apollo Client, makeVar được dùng để tạo ra các Reactive Variables. Đây là một cơ chế cực kỳ mạnh mẽ để quản lý Local State (trạng thái tại chỗ) mà không cần dùng đến Redux hay Context API.
+1. Quản lý trạng thái bên ngoài Cache
+Thông thường, Apollo Client quản lý dữ liệu từ Server (Remote Data). makeVar cho phép bạn lưu trữ các dữ liệu "tạm thời" hoặc "cá nhân" (Local Data) như: trạng thái thông báo (snack/toast), chế độ sáng/tối (dark mode), hoặc thông tin người dùng hiện tại.
+2. Tính phản xạ (Reactivity)
+Đúng như cái tên "Reactive", khi giá trị của biến snack thay đổi, tất cả các Component đang sử dụng biến này sẽ tự động re-render để cập nhật giao diện mới nhất.
+
+--codegen
+Khi bạn chạy yarn codegen, nó không tự nghĩ ra code. Nó sẽ làm một việc gọi là Introspection (Tự soi rọi):
+Nó bay sang địa chỉ Backend (thường là http://localhost:3001/graphql).
+Nó hỏi BE: "Này, thực đơn (Schema) của ông hôm nay có những món gì?".
+BE đưa ra một cái danh sách (Schema): "Tôi có món users, chats, nhưng không có món messages (do bạn viết sai thành mesasge hoặc lỗi import)".
+
+2# --- install
+
+npm install --global yarn
+
+yarn add @mui/material @emotion/react @emotion/styled @fontsource/roboto @mui/icons-material
+yarn add react-router-dom localforage match-sorter sort-by
+
+yarn add @apollo/client graphql --save
+yarn add @apollo/client graphql
+yarn add rxjs zen-observable
+
+yarn add --dev @graphql-codegen/cli @parcel/watcher
+yarn graphql-code-generator init
+->
+✔ What type of application are you building? Application built with React
+✔ Where is your schema?: (path or url) http://localhost:3001/graphql
+✔ Where are your operations and fragments?: src/**/*.ts
+✔ Where to write the output: src/gql/
+✔ Do you want to generate an introspection file? No
+✔ How to name the config file? codegen.ts
+✔ What script in package.json should run the codegen? codegen
+
+yarn add --dev concurrently
+
+yarn add graphql-ws --save
+
+--
+
+
+3# --- generate
+yarn codegen
+
+4# --- run
+
+--
+yarn --version
+yarn create react-app chatter-ui --template typescript
+
+--
+cd chatter-ui
+
+yarn start
+
+
+5# --- docker
+
+
+6# --- more
